@@ -9,13 +9,13 @@ import { headers } from "next/headers";
 
 
 
-export async function registerUser(formData: IUserRegisterPayload) {
+export async function registerUserAcion(formData: IUserRegisterPayload) {
 
 
   // Validate input
-  const validationResullt = validateNewUser(formData);
-    if (validationResullt.hasError) {
-        return {success: false, errors: validationResullt.errors};
+  const validationResult = validateNewUser(formData);
+    if (validationResult.hasError) {
+       throw new Error(validationResult.errors?.join(";"))
     }
     // Send data to backend API
    try {

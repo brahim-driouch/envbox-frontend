@@ -1,92 +1,112 @@
 "use client";
 
-import { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { Mail, Lock, MoveUpLeftIcon } from "lucide-react";
+import { useUserLogin } from "@/app/hooks/useUserLogin";
+import toast from "react-hot-toast";
 
-export default function RegisterPage() {
-  const [form, setForm] = useState({
-    fullname: "",
+export default function LoginPage() {
+  const [errors, setErrors] = useState<string[]>([]);
+  const [formdata, setFormdata] = useState({
     email: "",
     password: "",
-    confirm_password: "",
   });
 
-  const [error, setError] = useState("");
+  const mutation = useUserLogin();
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  }
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormdata({ ...formdata, [e.target.name]: e.target.value });
+  };
 
-  function handleSubmit(e: React.FormEvent) {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setErrors([]);
 
-    if (form.password !== form.confirm_password) {
-      setError("Passwords do not match");
-      return;
+    try {
+      const response = await mutation.mutateAsync(formdata);
+      if(response && response?.message){
+        toast.success(response?.message)
+      }
+
+    } catch (error:Error  | unknown) {
+     if(error instanceof Error){
+        toast.error(error.message)
+        return
+     }
+      toast.error("An error occured")
     }
-
-    setError("");
-
-    // TODO: send data to API route
-    console.log(form);
-  }
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-2xl shadow-md w-full max-w-md space-y-4"
-      >
-        <h1 className="text-2xl font-semibold text-center">Register</h1>
+    <div className="min-h-screen w-full flex items-center justify-center p-4">
+      <div className="w-full max-w-xl rounded-3xl bg-white p-10 shadow-lg border border-gray-100">
+        
+       
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back</h1>
+        <p className="text-gray-600 mb-8">
+          Sign in to manage your environment variables
+        </p>
 
-        {error && <p className="text-red-600 text-sm">{error}</p>}
+        <form onSubmit={handleSubmit} className="space-y-5">
+          
+          {/* Email */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Email
+            </label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="email"
+                name="email"
+                required
+                value={formdata.email}
+                onChange={handleChange}
+                className="w-full rounded-lg border border-gray-200 pl-10 pr-4 py-3 focus:border-blue-500 focus:ring-0"
+                placeholder="you@example.com"
+              />
+            </div>
+          </div>
 
-        <input
-          type="text"
-          name="fullname"
-          placeholder="Full name"
-          value={form.fullname}
-          onChange={handleChange}
-          required
-          className="w-full p-2 border rounded"
-        />
+          {/* Password */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Password
+            </label>
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="password"
+                name="password"
+                required
+                value={formdata.password}
+                onChange={handleChange}
+                className="w-full rounded-lg border border-gray-200 pl-10 pr-4 py-3 focus:border-blue-500 focus:ring-0"
+                placeholder="••••••••"
+              />
+            </div>
+          </div>
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-          className="w-full p-2 border rounded"
-        />
+          <button
+            disabled={mutation.isPending}
+            type="submit"
+            className={`${
+              mutation.isPending
+                ? "bg-gray-500"
+                : "bg-gray-900 hover:bg-gray-800"
+            } w-full rounded-lg py-3 text-white font-medium transition-colors`}
+          >
+            {mutation.isPending ? "Signing in..." : "Sign in"}
+          </button>
+        </form>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          required
-          className="w-full p-2 border rounded"
-        />
-
-        <input
-          type="password"
-          name="confirm_password"
-          placeholder="Confirm password"
-          value={form.confirm_password}
-          onChange={handleChange}
-          required
-          className="w-full p-2 border rounded"
-        />
-
-        <button
-          type="submit"
-          className="w-full bg-black text-white p-2 rounded hover:opacity-90"
-        >
-          Create account
-        </button>
-      </form>
+        <p className="mt-6 text-center text-sm text-gray-600">
+          Don’t have an account?{" "}
+          <a href="/register" className="font-medium text-blue-600 hover:underline">
+            Create one
+          </a>
+        </p>
+      </div>
     </div>
   );
 }

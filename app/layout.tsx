@@ -4,6 +4,7 @@ import "./globals.css";
 import Footer from "./components/shared/Footer";
 import Header from "./components/shared/Header";
 import { QueryClientProviderWrapper } from "@/queryClientProvider";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,7 +36,21 @@ export default function RootLayout({
           <Header />
         <main className="w-full max-w-6xl mx-auto min-h-screen flex flex-col justify-start items-center">{children}</main>
         <Footer />
-     
+           <Toaster toastOptions={{
+            success:{
+              style:{
+                backgroundColor:"green",
+                color:"white"
+              }
+            },
+            error:{
+              style:{
+                backgroundColor:"red",
+                color:"white"
+              }
+            }
+           }}/>
+
         </QueryClientProviderWrapper>
       </body>
     </html>
