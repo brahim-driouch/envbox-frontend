@@ -1,49 +1,70 @@
-"use server"
+"use server";
 import validateLoginInput from "@/app/heplers/validateLoginInput";
 import { IUserLoginPayload } from "@/types/userTypes";
-import axios, { isAxiosError } from "axios";
+import axios, { AxiosResponse, isAxiosError } from "axios";
 import { cookies } from "next/headers";
 
+type LoginServerResponse = {
+  message: string;
+  data: {
+    accessToken: string;
+    refreshToken: string;
+  };
+};
 export async function loginUserAction(formData: IUserLoginPayload) {
-    try {
-        const { errors, hasError } = validateLoginInput(formData);
+  try {
+    const { errors, hasError } = validateLoginInput(formData);
 
-        if (hasError) {
-            throw new Error(errors?.join(";"));
-        }
-
-        const response: { data: {data:{token: string, message: string }}  } = await axios.post(
-            `${process.env.API_URL}/api/v1/users/login`,
-            formData,
-            {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }
-        );
-
-        if (response && response.data) {
-            const cookieStore = await cookies();
-            
-            // Set expiration to 5 hours from now
-            const expiresDate = new Date();
-            expiresDate.setHours(expiresDate.getHours() + 5);
-            cookieStore.set("envbox_auth", response.data.data.token, {
-                path: "/",
-                expires: expiresDate,  // Use Date object
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production', // HTTPS only in production
-                sameSite: 'lax' // Add sameSite for better security
-            });
-        }
-
-        return { success: true, message: response.data.data.message };
-
-    } catch (error) {
-        if (isAxiosError(error)) {
-            return { success: false, error: error.response?.data.error || "An error occurred" };
-        }
-        const errorMessage = error instanceof Error ? error.message : "An error occurred";
-        return { success: false, error: errorMessage };
+    if (hasError) {
+      throw new Error(errors?.join(";"));
     }
+
+    const response:AxiosResponse<LoginServerResponse> = await axios.post(
+      `${process.env.API_URL}/api/v1/users/login`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response && response.status >=200 && response.status < 300  && response.data) {
+      const cookieStore = await cookies();
+
+      // Set expiration to 5 hours from now
+      const refreshTokenExpires = new Date(
+        Date.now() + 15 * 24 * 60 * 60 * 1000
+      ); // 15 days in milliseconds
+      const accessTokenExpires = new Date(Date.now() + 30 * 60 * 1000); // 30 minutes in milliseconds
+
+      // Set cookies
+      cookieStore.set("nvbx_ref_token", response.data.data.refreshToken, {
+        path: "/",
+        expires: refreshTokenExpires,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+      });
+
+      cookieStore.set("nvbx_acc_token", response.data.data.accessToken, {
+        path: "/",
+        expires: accessTokenExpires,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+      });
+    }
+
+    return { success: true, message: response.data.message };
+  } catch (error) {
+    if (isAxiosError(error)) {
+      return {
+        success: false,
+        error: error.response?.data.error || "An error occurred",
+      };
+    }
+    const errorMessage =
+      error instanceof Error ? error.message : "An error occurred";
+    return { success: false, error: errorMessage };
+  }
 }
