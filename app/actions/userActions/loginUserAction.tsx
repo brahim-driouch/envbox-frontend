@@ -35,7 +35,7 @@ export async function loginUserAction(formData: IUserLoginPayload) {
       const refreshTokenExpires = new Date(
         Date.now() + 15 * 24 * 60 * 60 * 1000
       ); // 15 days in milliseconds
-      const accessTokenExpires = new Date(Date.now() + 30 * 60 * 1000); // 30 minutes in milliseconds
+      const accessTokenExpires = new Date(Date.now() +15 * 60 * 1000); // 30 minutes in milliseconds
 
       // Set cookies
       cookieStore.set("nvbx_ref_token", response.data.data.refreshToken, {
