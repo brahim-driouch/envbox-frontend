@@ -1,7 +1,7 @@
 "use server";
 import validateLoginInput from "@/app/heplers/validateLoginInput";
 import { IUserLoginPayload } from "@/types/userTypes";
-import axios, { AxiosResponse, isAxiosError } from "axios";
+import axios, { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { cookies } from "next/headers";
 
 type LoginServerResponse = {
@@ -32,35 +32,36 @@ export async function loginUserAction(formData: IUserLoginPayload) {
       const cookieStore = await cookies();
 
       // Set expiration to 5 hours from now
-      const refreshTokenExpires = new Date(
-        Date.now() + 15 * 24 * 60 * 60 * 1000
-      ); // 15 days in milliseconds
-      const accessTokenExpires = new Date(Date.now() +15 * 60 * 1000); // 30 minutes in milliseconds
+     const refreshTokenExpires = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
+ 
+      // 15 days in milliseconds
+const accessTokenExpires = new Date(Date.now() + 15 * 60 * 1000);
 
       // Set cookies
-      cookieStore.set("nvbx_ref_token", response.data.data.refreshToken, {
+      cookieStore.set("nvstash_ref_token", response.data.data.refreshToken, {
         path: "/",
         expires: refreshTokenExpires,
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
+        domain: process.env.NODE_ENV === "production" ? ".envbox.ai" : undefined,
       });
 
-      cookieStore.set("nvbx_acc_token", response.data.data.accessToken, {
+      cookieStore.set("nvstash_acc_token", response.data.data.accessToken, {
         path: "/",
         expires: accessTokenExpires,
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
+        domain: process.env.NODE_ENV === "production" ? ".envbox.ai" : undefined,
       });
     }
-
     return { success: true, message: response.data.message };
   } catch (error) {
     if (isAxiosError(error)) {
       return {
         success: false,
-        error: error.response?.data.error || "An error occurred",
+        error: error.response?.data?.error || "An error occurred",
       };
     }
     const errorMessage =

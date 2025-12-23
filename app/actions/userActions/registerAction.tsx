@@ -26,14 +26,21 @@ export async function registerUserAcion(formData: IUserRegisterPayload) {
         
     })
 
-    return {success: true, errors: null,data:response.data};
+   const {hasError,errors} = validateNewUser(formData);
+   
+   if (hasError) {
+     return {success: false, error: errors?.join(";")};
+   }
+
+   return {success: true, message: response.data.message};
+
     
    } catch (error) {
      if (axios.isAxiosError(error)){
-        const errorMessage = error.response?.data.error
-        throw new Error(errorMessage)
+        const errorMessage = error.response?.data.error || "Registration failed";
+        return {success: false, error: errorMessage};
      }
-         throw new Error("An unexpected error occurred");
+     return {success: false, error: "An unexpected error occurred"};
 
    }
 

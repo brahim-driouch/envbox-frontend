@@ -1,6 +1,6 @@
 import { Key } from "lucide-react"
-import AuthNavBar from "../nav/AuthNavBar"
-import Navbar from "../nav/Navbar"
+import AuthNavBar from "./nav/AuthNavBar"
+import Navbar from "./nav/Navbar"
 
 
 

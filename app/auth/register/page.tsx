@@ -4,6 +4,7 @@ import { User, Mail, Lock } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { useUserRegister } from "@/app/hooks/useUserRegister";
 import validateNewUser from "@/app/heplers/validateNewUser";
+import toast from "react-hot-toast";
 
 export default function RegisterPage() {
     const [errors,setErrors]=useState<string[]>([])
@@ -19,27 +20,31 @@ export default function RegisterPage() {
     setFormdata({ ...formdata, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async(e:FormEvent) => {
-    e.preventDefault();
-    setErrors([])
-        console.log(formdata)
+const handleSubmit = async (e: FormEvent) => {
+  e.preventDefault();
+  setErrors([]);
 
-    const validationResult = validateNewUser(formdata)
-    if(validationResult.hasError){
-        setErrors(validationResult.errors!)
-        return
-    }
-   try {
-     await mutation.mutateAsync(formdata)
-     
-   } catch (error) {
-    console.log(error)
-      const errorMessage = error instanceof Error ? error.message : "error"
-      setErrors([errorMessage])
-   }
-
+  try {
+    const response = await mutation.mutateAsync(formdata);
     
-  };
+    // Check if the response indicates an error
+    if (!response.success && response.error) {
+      toast.error(response.error);
+      return;
+    }
+    
+    if (response && response?.message) {
+      toast.success(response?.message);
+    }
+
+  } catch (error: Error | unknown) {
+    if (error instanceof Error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.error("An error occurred");
+  }
+};
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-4">

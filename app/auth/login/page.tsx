@@ -18,25 +18,31 @@ export default function LoginPage() {
     setFormdata({ ...formdata, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setErrors([]);
+const handleSubmit = async (e: FormEvent) => {
+  e.preventDefault();
+  setErrors([]);
 
-    try {
-      const response = await mutation.mutateAsync(formdata);
-      if(response && response?.message){
-        toast.success(response?.message)
-      }
-
-    } catch (error:Error  | unknown) {
-     if(error instanceof Error){
-        toast.error(error.message)
-        return
-     }
-      toast.error("An error occured")
+  try {
+    const response = await mutation.mutateAsync(formdata);
+    
+    // Check if the response indicates an error
+    if (!response.success && response.error) {
+      toast.error(response.error);
+      return;
     }
-  };
+    
+    if (response && response?.message) {
+      toast.success(response?.message);
+    }
 
+  } catch (error: Error | unknown) {
+    if (error instanceof Error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.error("An error occurred");
+  }
+};
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-4">
       <div className="w-full max-w-xl rounded-3xl bg-white p-10 shadow-lg border border-gray-100">
