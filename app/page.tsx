@@ -1,4 +1,3 @@
-import { Check, X, Shield, Users, Terminal, Mail, Lock, Zap, Code, Server, Key } from 'lucide-react';
 import Scope from './components/landing/scope';
 import CallToAction from './components/landing/CallToAction';
 import Features from './components/landing/Features';
@@ -9,7 +8,7 @@ import PricingSection from './components/landing/PricingSection';
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen ">
       {/* Navigation */}
     
 

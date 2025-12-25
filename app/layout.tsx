@@ -27,9 +27,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" >
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased `}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-gray-300 `}
       >
         <QueryClientProviderWrapper>
      
@@ -37,6 +37,13 @@ export default function RootLayout({
         <main className="w-full max-w-6xl mx-auto min-h-screen flex flex-col justify-start items-center">{children}</main>
         <Footer />
            <Toaster toastOptions={{
+            style:{
+              fontFamily:"monospace",
+              fontWeight:"bold",
+              fontSize:"14px",
+              padding:"10px",
+              borderRadius:"5px"
+            },
             success:{
               style:{
                 backgroundColor:"green",
