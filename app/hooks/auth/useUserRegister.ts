@@ -1,6 +1,6 @@
+import { registerUserAcion } from "@/app/actions/userActions/registerAction";
 import { IUserRegisterPayload } from "@/types/userTypes";
 import { useMutation } from "@tanstack/react-query";
-import {  registerUserAcion } from "../actions/userActions/registerAction";
 
 
 

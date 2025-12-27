@@ -2,7 +2,7 @@
 
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Mail, Lock, ArrowRight, Sparkles, Shield } from "lucide-react";
-import { useUserLogin } from "@/app/hooks/useUserLogin";
+import { useUserLogin } from "@/app/hooks/auth/useUserLogin";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";

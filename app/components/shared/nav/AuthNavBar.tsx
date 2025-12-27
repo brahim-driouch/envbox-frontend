@@ -2,26 +2,32 @@
 
 import Link from "next/link"
 import { LogIn, LogOut, Rocket } from "lucide-react"
-import { useAuth } from "@/app/hooks/useAuth"
 import { useRouter } from "next/navigation";
-import { logoutAction } from "@/app/actions/userActions/logoutAction";
 import { useQueryClient } from "@tanstack/react-query";
+import { useLogout } from "@/app/hooks/auth/useLogout";
+import { LoadingCard, LoadingInline, LoadingOverlay } from "../loading";
+import { useAuth } from "@/authProvider";
 
 const AuthNavBar = () => {
   const router =useRouter()
-  const {data} = useAuth();
+  const user  = useAuth();
+  const mutation = useLogout();
   const queryClient = useQueryClient();
+
+  
+// log out handler
   const logoutHandler = async()=>{
-       await logoutAction()
+       await mutation.mutateAsync();
        await queryClient.invalidateQueries({
         queryKey: ['auth']
        })
        router.push("/")
   }
+  
   return (
     <nav className="relative">
       <ul className="flex flex-col sm:flex-row gap-4">
-       {data?.isAuthenticated ? (
+       {  user?.isAuthenticated ? (
           <>
            <LogoutButton onClick={logoutHandler}/>
           </>
@@ -42,10 +48,10 @@ const AuthNavBar = () => {
         {/* Get Started Link */}
         <li>
           <Link 
-            className="group inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-400 to-cyan-400 text-black font-black uppercase text-sm tracking-wider hover:from-emerald-300 hover:to-cyan-300 transition-all duration-300 hover:translate-x-[-2px] hover:translate-y-[-2px] shadow-[4px_4px_0px_0px_rgba(16,185,129,1)] hover:shadow-[6px_6px_0px_0px_rgba(16,185,129,1)] relative overflow-hidden" 
+            className="group inline-flex items-center gap-2 px-6 py-3 bg-linear-to-r from-emerald-400 to-cyan-400 text-black font-black uppercase text-sm tracking-wider hover:from-emerald-300 hover:to-cyan-300 transition-all duration-300 hover:translate-x-[-2px] hover:translate-y-[-2px] shadow-[4px_4px_0px_0px_rgba(16,185,129,1)] hover:shadow-[6px_6px_0px_0px_rgba(16,185,129,1)] relative overflow-hidden" 
             href={"/auth/register"}
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-300 to-emerald-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="absolute inset-0 bg-linear-to-r from-cyan-300 to-emerald-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <span className="relative z-10 flex items-center gap-2">
               <Rocket className="w-4 h-4 group-hover:rotate-12 group-hover:scale-110 transition-transform" />
               Get Started

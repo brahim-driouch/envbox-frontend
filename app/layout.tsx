@@ -5,6 +5,7 @@ import Footer from "./components/shared/Footer";
 import Header from "./components/shared/Header";
 import { QueryClientProviderWrapper } from "@/queryClientProvider";
 import { Toaster } from "react-hot-toast";
+import { AuthProvider } from "@/authProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +33,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-gray-300 `}
       >
         <QueryClientProviderWrapper>
+          <AuthProvider>
      
           <Header />
         <main className="w-full max-w-6xl mx-auto min-h-screen flex flex-col justify-start items-center">{children}</main>
@@ -57,7 +59,7 @@ export default function RootLayout({
               }
             }
            }}/>
-
+  </AuthProvider>
         </QueryClientProviderWrapper>
       </body>
     </html>

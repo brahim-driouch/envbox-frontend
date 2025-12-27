@@ -2,7 +2,7 @@
 
 import { ChangeEvent, FormEvent, useState } from "react";
 import { User, Mail, Lock, ArrowRight, Sparkles, Shield, CheckCircle2 } from "lucide-react";
-import { useUserRegister } from "@/app/hooks/useUserRegister";
+import { useUserRegister } from "@/app/hooks/auth/useUserRegister";
 import toast from "react-hot-toast";
 import Link from "next/link";
 

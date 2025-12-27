@@ -61,7 +61,7 @@ export function LoadingPage() {
 // Inline loading component (for use within pages)
 export function LoadingInline() {
   return (
-    <div className="flex w-full h-screen fixed z-50 items-center justify-center p-8 bg-white/10 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm">
       <div className="text-center">
         {/* Spinner */}
         <div className="flex justify-center mb-4">

@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { Plus,  Users, Box, Trash2, Edit, Eye, EyeOff, X } from 'lucide-react';
-import { useAuth } from '@/app/hooks/useAuth';
 import { LoadingInline } from '@/app/components/shared/loading';
 import { Sidebar } from '@/app/components/dashboard/sidebar';
+import { useAuth } from '@/authProvider';
 
 interface Project {
   id: string;
@@ -70,10 +70,9 @@ export default function Dashboard() {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState<'project' | 'team' | 'member' | 'env'>('project');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-const {data,isLoading,isError,error} = useAuth();
-  if(isLoading) return <LoadingInline/>
-  if(isError) return <div>Error: {error.message}</div>
-  if(!data?.isAuthenticated) return <div>Unauthorized</div>
+const data = useAuth();
+  if(data.isLoading) return <LoadingInline/>
+  if(data.isError) return <div>Error: {data.error}</div>
  
   const openModal = (type: 'project' | 'team' | 'member' | 'env', project?: Project) => {
     setModalType(type);
