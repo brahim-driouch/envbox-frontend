@@ -6,6 +6,7 @@ import { useUserLogin } from "@/app/hooks/useUserLogin";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function LoginPage() {
   const [formdata, setFormdata] = useState({
@@ -14,7 +15,7 @@ export default function LoginPage() {
   });
   const router = useRouter();
   const mutation = useUserLogin();
-
+  const queryClient = useQueryClient();
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormdata({ ...formdata, [e.target.name]: e.target.value });
   };
@@ -32,6 +33,7 @@ export default function LoginPage() {
       
       if (response && response?.message) {
         toast.success(response?.message);
+        await queryClient.invalidateQueries({ queryKey: ['auth'] });
         router.push("/in");
       }
     } catch (error: Error | unknown) {
@@ -80,7 +82,7 @@ export default function LoginPage() {
           {/* Title */}
           <h1 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight mb-3 text-center animate-slide-up" style={{ animationDelay: '0.1s' }}>
             Welcome
-            <span className="block mt-2 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="block mt-2 bg-linear-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
               Back
             </span>
           </h1>
@@ -145,7 +147,7 @@ export default function LoginPage() {
               className={`group w-full py-4 text-lg font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-3 animate-slide-up ${
                 mutation.isPending
                   ? "bg-zinc-700 text-zinc-500 cursor-not-allowed border-2 border-zinc-600"
-                  : "bg-gradient-to-r from-emerald-400 to-cyan-400 text-black hover:from-emerald-300 hover:to-cyan-300 shadow-[6px_6px_0px_0px_rgba(16,185,129,1)] hover:shadow-[4px_4px_0px_0px_rgba(16,185,129,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[6px] active:translate-y-[6px]"
+                  : "bg-linear-to-r from-emerald-400 to-cyan-400 text-black hover:from-emerald-300 hover:to-cyan-300 shadow-[6px_6px_0px_0px_rgba(16,185,129,1)] hover:shadow-[4px_4px_0px_0px_rgba(16,185,129,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[6px] active:translate-y-[6px]"
               }`}
               style={{ animationDelay: '0.6s' }}
             >
@@ -187,7 +189,7 @@ export default function LoginPage() {
           </div>
 
           {/* Bottom accent line */}
-          <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 via-cyan-400 to-emerald-400" />
+          <div className="absolute bottom-0 left-0 w-full h-1 bg-linear-to-r from-emerald-400 via-cyan-400 to-emerald-400" />
         </div>
       </div>
     </div>

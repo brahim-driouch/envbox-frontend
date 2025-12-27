@@ -6,7 +6,7 @@ import { getSessionAction } from "../actions/userActions/getSessionAction";
 
 export const useAuth = () => {
    return useQuery({
-    queryKey: ['auth', ],
+    queryKey: ['auth'],
     queryFn: async () => {
         const result = await getSessionAction();
         return result;

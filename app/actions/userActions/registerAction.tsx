@@ -19,7 +19,7 @@ export async function registerUserAcion(formData: IUserRegisterPayload) {
     }
     // Send data to backend API
    try {
-     const response = await axios.post(`${process.env.API_URL}/api/v1/users/register`,formData,{
+     const response = await axios.post(`${process.env.API_URL}/api/v1/auth/register`,formData,{
         headers:{
             "Content-Type":"application/json"
         },

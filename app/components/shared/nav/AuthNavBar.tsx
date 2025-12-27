@@ -1,13 +1,34 @@
 "use client";
 
 import Link from "next/link"
-import { LogIn, Rocket } from "lucide-react"
+import { LogIn, LogOut, Rocket } from "lucide-react"
+import { useAuth } from "@/app/hooks/useAuth"
+import { useRouter } from "next/navigation";
+import { logoutAction } from "@/app/actions/userActions/logoutAction";
+import { useQueryClient } from "@tanstack/react-query";
 
 const AuthNavBar = () => {
+  const router =useRouter()
+  const {data} = useAuth();
+  const queryClient = useQueryClient();
+  const logoutHandler = async()=>{
+       await logoutAction()
+       await queryClient.invalidateQueries({
+        queryKey: ['auth']
+       })
+       router.push("/")
+  }
   return (
     <nav className="relative">
       <ul className="flex flex-col sm:flex-row gap-4">
-        {/* Login Link */}
+       {data?.isAuthenticated ? (
+          <>
+           <LogoutButton onClick={logoutHandler}/>
+          </>
+       ):
+       (
+        <>
+             {/* Login Link */}
         <li>
           <Link 
             className="group inline-flex items-center gap-2 px-6 py-3 bg-zinc-900 border-2 border-zinc-700 text-white font-bold uppercase text-sm tracking-wider hover:border-emerald-400 hover:text-emerald-400 transition-all duration-300 hover:translate-x-[-2px] hover:translate-y-[-2px] shadow-[2px_2px_0px_0px_rgba(39,39,42,1)] hover:shadow-[4px_4px_0px_0px_rgba(16,185,129,0.5)]" 
@@ -31,9 +52,27 @@ const AuthNavBar = () => {
             </span>
           </Link>
         </li>
+        </>
+       )
+       }
       </ul>
     </nav>
   )
 }
 
 export default AuthNavBar
+
+
+
+// Primary Logout Button (Icon + Text)
+ function LogoutButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className="group inline-flex items-center gap-3 bg-zinc-900 border-2 border-zinc-700 text-zinc-400 px-6 py-3 font-bold uppercase text-sm tracking-wider hover:border-red-500 hover:text-red-500 hover:bg-red-500/10 transition-all duration-300 hover:translate-x-[-2px] hover:translate-y-[-2px] shadow-[2px_2px_0px_0px_rgba(39,39,42,1)] hover:shadow-[4px_4px_0px_0px_rgba(239,68,68,0.5)]"
+    >
+      <LogOut className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+      <span>Logout</span>
+    </button>
+  )
+}

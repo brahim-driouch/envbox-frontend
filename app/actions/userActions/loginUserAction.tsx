@@ -2,7 +2,7 @@
 import validateLoginInput from "@/app/heplers/validateLoginInput";
 import { IUserLoginPayload } from "@/types/userTypes";
 import axios, { AxiosError, AxiosResponse, isAxiosError } from "axios";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 
 type LoginServerResponse = {
   message: string;
@@ -18,10 +18,17 @@ export async function loginUserAction(formData: IUserLoginPayload) {
     if (hasError) {
       throw new Error(errors?.join(";"));
     }
-
+    const requestHeaders = await headers()
+    const userAgent = requestHeaders.get("user-agent")
+    const ipAddress = requestHeaders.get("x-forwarded-for") || requestHeaders.get("cf-connecting-ip") || requestHeaders.get("x-real-ip")
+    console.log(userAgent, ipAddress)
     const response:AxiosResponse<LoginServerResponse> = await axios.post(
-      `${process.env.API_URL}/api/v1/users/login`,
-      formData,
+      `${process.env.API_URL}/api/v1/auth/login`,
+      {
+        ...formData,
+        ip_address: ipAddress,
+        user_agent: userAgent
+      },
       {
         headers: {
           "Content-Type": "application/json",

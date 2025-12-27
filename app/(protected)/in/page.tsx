@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 import { Plus,  Users, Box, Trash2, Edit, Eye, EyeOff, X } from 'lucide-react';
+import { useAuth } from '@/app/hooks/useAuth';
+import { LoadingInline } from '@/app/components/shared/loading';
+import { Sidebar } from '@/app/components/dashboard/sidebar';
 
 interface Project {
   id: string;
@@ -34,6 +37,8 @@ interface Member {
 }
 
 export default function Dashboard() {
+  
+
   const [activeView, setActiveView] = useState<'projects' | 'teams' | 'members'>('projects');
   const [projects, setProjects] = useState<Project[]>([
     {
@@ -65,7 +70,11 @@ export default function Dashboard() {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState<'project' | 'team' | 'member' | 'env'>('project');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-
+const {data,isLoading,isError,error} = useAuth();
+  if(isLoading) return <LoadingInline/>
+  if(isError) return <div>Error: {error.message}</div>
+  if(!data?.isAuthenticated) return <div>Unauthorized</div>
+ 
   const openModal = (type: 'project' | 'team' | 'member' | 'env', project?: Project) => {
     setModalType(type);
     setSelectedProject(project || null);
@@ -96,44 +105,13 @@ export default function Dashboard() {
       
       <div className="relative grid lg:grid-cols-[280px_1fr]">
         {/* Sidebar */}
-        <aside className="lg:sticky lg:top-0  bg-zinc-950 border-r-4 border-emerald-400 lg:overflow-y-auto">
-          <div className="p-8">
-            {/* Logo */}
-            <h1 className="text-5xl font-black tracking-tighter mb-2 bg-linear-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent uppercase">
-              envbox
-            </h1>
-            <p className="text-xs text-zinc-500 uppercase tracking-widest mb-12">Admin Portal</p>
-
-            {/* Navigation */}
-            <nav className="space-y-2">
-              <NavItem
-                icon={<Box className="w-5 h-5" />}
-                label="Projects"
-                active={activeView === 'projects'}
-                onClick={() => setActiveView('projects')}
-              />
-              <NavItem
-                icon={<Users className="w-5 h-5" />}
-                label="Teams"
-                active={activeView === 'teams'}
-                onClick={() => setActiveView('teams')}
-              />
-              <NavItem
-                icon={<Users className="w-5 h-5" />}
-                label="Members"
-                active={activeView === 'members'}
-                onClick={() => setActiveView('members')}
-              />
-            </nav>
-
-            {/* Stats */}
-            <div className="mt-12 space-y-4 pt-8 border-t-2 border-zinc-800">
-              <StatBadge label="Projects" value={projects.length} color="emerald" />
-              <StatBadge label="Teams" value={teams.length} color="cyan" />
-              <StatBadge label="Members" value={members.length} color="purple" />
-            </div>
-          </div>
-        </aside>
+      <Sidebar 
+        activeView={activeView} 
+        setActiveView={setActiveView} 
+        projectsLength={projects.length} 
+        teamsLength={teams.length} 
+        membersLength={members.length} 
+      />
 
         {/* Main Content */}
         <main className="p-4 lg:p-8">
@@ -213,41 +191,12 @@ export default function Dashboard() {
   );
 }
 
-function NavItem({ icon, label, active, onClick }: any) {
-  return (
-    <button
-      onClick={onClick}
-      className={`w-full flex items-center gap-3 px-4 py-3 uppercase text-sm font-bold tracking-wider
-                 transition-all duration-200 border-l-4 group
-                 ${active 
-                   ? 'bg-zinc-900 border-emerald-400 text-emerald-400' 
-                   : 'border-transparent hover:bg-zinc-900 hover:border-zinc-700 text-zinc-400 hover:text-white'
-                 }`}
-    >
-      <span className={`transition-transform duration-200 ${active ? 'scale-110' : 'group-hover:scale-110'}`}>
-        {icon}
-      </span>
-      {label}
-    </button>
-  );
-}
 
-function StatBadge({ label, value, color }: any) {
-  const colors = {
-    emerald: 'from-emerald-400 to-emerald-600',
-    cyan: 'from-cyan-400 to-cyan-600',
-    purple: 'from-purple-400 to-purple-600',
-  };
 
-  return (
-    <div className="bg-zinc-900 border-2 border-zinc-800 p-4">
-      <div className={`text-3xl font-black bg-linear-to-r ${colors[color as keyof typeof colors]} bg-clip-text text-transparent mb-1`}>
-        {value}
-      </div>
-      <div className="text-xs text-zinc-500 uppercase tracking-widest">{label}</div>
-    </div>
-  );
-}
+
+
+
+
 
 function ProjectsView({ projects, teams, members, onOpenModal, onDelete }: any) {
   return (
