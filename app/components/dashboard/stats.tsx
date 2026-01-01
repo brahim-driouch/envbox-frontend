@@ -1,3 +1,5 @@
+import { useDashboardStats } from "@/app/hooks/stats/useDashboardStats";
+import { useAuth } from "@/authProvider";
 
   const StatBadge = ({ label, value, color }: any) => {
   const colors = {
@@ -13,16 +15,16 @@
       <div className="text-xs text-zinc-500 uppercase tracking-widest">{label}</div>
     </div>
   );
-  }
+  } 
 export const Stats =()=>{
-    const projectsLength =0
-    const teamsLength =0
-    const membersLength =0
-    return (
+  const auth = useAuth();
+  const userId = auth.user?.id;
+  const { data }= useDashboardStats(userId || ""); // TODO: use actual ID
+  return (
          <div className="mt-12 flex justify-between items-start px-6 space-x-4 space-y-4 pt-8 border-t-2 border-zinc-800">
-              <StatBadge label="Projects" value={projectsLength} color="emerald" />
-              <StatBadge label="Teams" value={teamsLength} color="cyan" />
-              <StatBadge label="Members" value={membersLength} color="purple" />
+              <StatBadge label="Projects" value={data?.data?.projectsCount || 0} color="emerald" />
+              <StatBadge label="Teams" value={data?.data?.teamsCount || 0} color="cyan" />
+              <StatBadge label="Members" value={data?.data?.membersCount || 0} color="purple" />
             </div>
     )
 }

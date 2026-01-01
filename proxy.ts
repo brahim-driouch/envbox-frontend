@@ -24,6 +24,7 @@ export async function proxy(request: NextRequest) {
     if (isAuthRoutes && hasRefreshToken) {
         return NextResponse.redirect(new URL("/in", request.url));
     }
+    
   return NextResponse.next()
 }
  

@@ -6,13 +6,21 @@ export interface EnvVar {
 
 
 export interface Project {
-  id?: string;
+  id: string;
   name: string;
   description: string;
   envVars?: EnvVar[];
+  assignedTeam: string;
+  assignedMembers?: string[];
+  createdAt: Date;
+}
+
+export interface CreateProject {
+  name: string;
+  description: string;
+  repoUrl?: string;
   assignedTeam?: string;
   assignedMembers?: string[];
-  createdAt?: Date;
 }
 
 

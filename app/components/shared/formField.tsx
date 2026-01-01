@@ -1,26 +1,30 @@
 
 type FormFieldProps = {
   label: string;
+  name: string;
   value: string;
-  onChange: (value: string) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   placeholder: string;
   textarea?: boolean;
   inputType?: string;
+  required?: boolean;
 };
 
-export function FormField({ label, value, onChange, placeholder, textarea = false, inputType = 'text' }: FormFieldProps) {
+export function FormField({ label, name, value, onChange, placeholder, textarea = false, inputType = 'text', required = false }: FormFieldProps) {
   return (
-    <div>
+    <>
       <label className="block text-xs uppercase tracking-widest text-zinc-500 font-bold mb-2">
         {label}
       </label>
       {textarea ? (
         <textarea
           className="w-full bg-zinc-900 border-2 border-zinc-700 p-3 text-white 
-                   focus:border-emerald-400 outline-none min-h-[100px] resize-y"
+                   focus:border-emerald-400 outline-none min-h-25 resize-y"
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={onChange}
           placeholder={placeholder}
+          name={name}
+          required={required}
         />
       ) : (
         <input
@@ -28,10 +32,12 @@ export function FormField({ label, value, onChange, placeholder, textarea = fals
           className="w-full bg-zinc-900 border-2 border-zinc-700 p-3 text-white 
                    focus:border-emerald-400 outline-none"
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={onChange}
           placeholder={placeholder}
+          name={name}
+          required={required}
         />
       )}
-    </div>
+    </>
   );
 }

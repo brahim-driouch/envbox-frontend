@@ -5,6 +5,7 @@ import { setCookie } from "@/app/heplers/setCookie"
 import axios, { AxiosError } from "axios"
 import { cookies } from "next/headers"
 import { LoggedInUser } from "@/types/userTypes";
+import { setAuthorizationHeaders } from "@/app/heplers/setAuthorizationHeaders"
 
 type SessionResponse = {
     success: boolean;
@@ -16,27 +17,15 @@ type SessionResponse = {
 export async function getSessionAction(): Promise<SessionResponse> {
  
     try {
-        const cookieStore = await cookies()
-        const accessToken = cookieStore.get("nvstash_acc_token")?.value
-        const refreshToken = cookieStore.get("nvstash_ref_token")?.value
+      
 
-        if(!refreshToken) {
-            return {
-                success: false,
-                isAuthenticated: false,
-                user: null,
-                error: 'No refresh token available'
-            };
-        }
-
+     
+         const authHeaders = await setAuthorizationHeaders();
         // Call session endpoint
         const response = await axios.get(
             `${process.env.API_URL}/api/v1/auth/session`,
             {
-                headers: {
-                    "Authorization": `Bearer ${accessToken || ""}`,
-                    "Cookie": `nvstash_ref_token=${refreshToken || ""}`
-                },
+                headers: authHeaders,
                 withCredentials: true
             }
         )
