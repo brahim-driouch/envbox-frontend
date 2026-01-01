@@ -167,13 +167,21 @@ export default function LoginPage() {
 
           {/* Sign up link */}
           <div className="mt-8 text-center animate-fade-in" style={{ animationDelay: '0.7s' }}>
-            <p className="text-zinc-500 font-mono text-sm">
-              Don't have an account?{" "}
+            <p className="text-zinc-500 font-mono text-sm text-left">
+              {" Don't have an account?"}{" "}
               <Link 
                 href="/auth/register" 
-                className="text-emerald-400 hover:text-emerald-300 font-bold underline decoration-2 underline-offset-4 transition-colors"
+                className="text-emerald-400  hover:text-emerald-300 font-bold underline decoration-2 underline-offset-4 transition-colors"
               >
                 Create one
+              </Link>
+              <br/>
+              {" Didn't receive the verification email?"}{" "}
+              <Link 
+                href="/auth/resend-verification" 
+                className="text-emerald-400 hover:text-emerald-300 font-bold underline decoration-2 underline-offset-4 transition-colors"
+              >
+                Resend email
               </Link>
             </p>
           </div>

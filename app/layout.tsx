@@ -36,7 +36,7 @@ export default function RootLayout({
           <AuthProvider>
      
           <Header />
-        <main className="w-full max-w-6xl mx-auto min-h-screen flex flex-col justify-start items-center">{children}</main>
+        <main className="w-full mx-auto min-h-screen flex flex-col justify-start items-center">{children}</main>
         <Footer />
            <Toaster toastOptions={{
             style:{

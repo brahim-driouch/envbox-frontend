@@ -5,7 +5,6 @@ import { LogIn, LogOut, Rocket } from "lucide-react"
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { useLogout } from "@/app/hooks/auth/useLogout";
-import { LoadingCard, LoadingInline, LoadingOverlay } from "../loading";
 import { useAuth } from "@/authProvider";
 
 const AuthNavBar = () => {
@@ -30,6 +29,10 @@ const AuthNavBar = () => {
        {  user?.isAuthenticated ? (
           <>
            <LogoutButton onClick={logoutHandler}/>
+         <Link 
+            className="group inline-flex items-center gap-2 px-6 py-3 bg-zinc-900 border-2 hover:border-zinc-700 hover:text-white font-bold uppercase text-sm tracking-wider border-emerald-400 text-emerald-400 transition-all duration-300 hover:translate-x-[-2px] hover:translate-y-[-2px] shadow-[2px_2px_0px_0px_rgba(39,39,42,1)] hover:shadow-[4px_4px_0px_0px_rgba(16,185,129,0.5)]" 
+            href={"/auth/login"}
+          >Dashboard</Link>
           </>
        ):
        (

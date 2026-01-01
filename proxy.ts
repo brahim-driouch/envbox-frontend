@@ -8,12 +8,14 @@ export async function proxy(request: NextRequest) {
     const url = new URL(request.url);
     const isProtected = url.pathname.startsWith("/in");
     const isAuthRoutes = url.pathname === '/auth/login' || url.pathname === '/auth/register';
-    const refreshToken = (await cookies()).get("nvstash_ref_token")?.value;
+    const cookieStore = await cookies();
+    const refreshToken = cookieStore.get("nvstash_ref_token")?.value;
     const hasRefreshToken = !!refreshToken;
     // Check if this is a protected route that requires authentication
     if (isProtected && !isAuthRoutes) {
         
         if(!hasRefreshToken){
+       cookieStore.delete("nvstash_acc_token");
           return NextResponse.redirect(new URL("/auth/login", request.url));
         }
     }
