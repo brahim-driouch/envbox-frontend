@@ -1,15 +1,16 @@
 
 "use client"
-import { AddProjectForm } from "@/app/components/dashboard/projects/addProjectForm";
-import { Modal } from "@/app/components/shared/modal";
+import { ProjectsView } from "@/app/components/dashboard/projects/projectsView";
 import { Plus } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
-
-
-
+import useProjects from "@/app/hooks/projects/useProjects";
+import { useAuth } from "@/authProvider";
 
 export default function ProjectsPage() {
+  
+ const auth = useAuth()
+ const userId = auth.user?.id;
+  const { data } = useProjects(userId || "");
 
   
   return (
@@ -31,6 +32,7 @@ export default function ProjectsPage() {
           New Project
         </Link>
       </div>
+      <ProjectsView projects={data?.data?.projects || []} />
       </div>
     </div>
   );

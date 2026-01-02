@@ -7,10 +7,14 @@ import { useCreateProject } from "@/app/hooks/projects/useCreateProject";
 import handleApiError from "@/app/heplers/handleErrors";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 
 export const AddProjectForm = () => {
     const mutation = useCreateProject()
+    const queryClient =useQueryClient()
+    const router = useRouter()
     const [assignedMembersString, setAssignedMembersString] = useState('');
     const [projectData,setProjectData] = useState<CreateProject>({
         name: '',
@@ -49,10 +53,12 @@ export const AddProjectForm = () => {
             if(!response.success){
                 throw new Error(response.error || 'Failed to create project');
             }
+            await queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
             toast.success('Project created successfully!');
+            router.push("/in/projects")
         } catch (error) {
-           const errorMessqge = handleApiError(error)
-           toast.error(errorMessqge);
+           const errorMessage = handleApiError(error)
+           toast.error(errorMessage);
         }
     };
 

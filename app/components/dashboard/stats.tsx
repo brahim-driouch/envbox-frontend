@@ -19,7 +19,8 @@ import { useAuth } from "@/authProvider";
 export const Stats =()=>{
   const auth = useAuth();
   const userId = auth.user?.id;
-  const { data }= useDashboardStats(userId || ""); // TODO: use actual ID
+  const { data,isLoading }= useDashboardStats(userId || ""); 
+  if(isLoading) return 
   return (
          <div className="mt-12 flex justify-between items-start px-6 space-x-4 space-y-4 pt-8 border-t-2 border-zinc-800">
               <StatBadge label="Projects" value={data?.data?.projectsCount || 0} color="emerald" />

@@ -3,8 +3,11 @@ import { IconButton } from "../../shared/iconButton";
 import { Edit, Trash2 } from "lucide-react";
 import { EnvVarItem } from "../envVarItem";
 
-export const ProjectsView = () => {
-    const projects : Project[] = []
+type ProjectsViewProps = {
+  projects: Project[];
+};
+
+export const ProjectsView = ({ projects }: ProjectsViewProps) => {
 
   return (
     <div className="space-y-6 animate-fade-in">
