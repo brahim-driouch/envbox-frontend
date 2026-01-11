@@ -22,7 +22,9 @@ const AuthNavBar = () => {
        })
        router.push("/")
   }
-  
+  if (user.isLoading) {
+    return null;
+  }
   return (
     <nav className="relative">
       <ul className="flex flex-col sm:flex-row gap-4">

@@ -1,7 +1,7 @@
 
 
 export interface ApiResponse<T> {
-    data: T;
+    data?: T;
     message?: string;
     error?: string;
     success: boolean;

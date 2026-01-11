@@ -6,7 +6,7 @@ import Link from "next/link";
 import useProjects from "@/app/hooks/projects/useProjects";
 import { useAuth } from "@/authProvider";
 
-export default function ProjectsPage() {
+export default function NewProjectPage() {
   
  const auth = useAuth()
  const userId = auth.user?.id;
@@ -20,7 +20,7 @@ export default function ProjectsPage() {
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Projects</h1>
         <div className="flex justify-end mb-6">
-        <Link href="/in/projects/create"
+        <Link href="/in/projects/new"
         
          
           className="px-6 py-3 bg-emerald-400 text-black font-bold uppercase tracking-wider

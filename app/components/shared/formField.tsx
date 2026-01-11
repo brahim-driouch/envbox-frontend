@@ -8,9 +8,10 @@ type FormFieldProps = {
   textarea?: boolean;
   inputType?: string;
   required?: boolean;
+  type?: string;
 };
 
-export function FormField({ label, name, value, onChange, placeholder, textarea = false, inputType = 'text', required = false }: FormFieldProps) {
+export function FormField({ label, name, value, onChange, placeholder, textarea = false, inputType = 'text', required = false, type = 'text' }: FormFieldProps) {
   return (
     <>
       <label className="block text-xs uppercase tracking-widest text-zinc-500 font-bold mb-2">

@@ -4,7 +4,7 @@ import { AxiosError, isAxiosError } from "axios";
 
 
 
-export default function handleApiError(error:unknown) {
+export default function handleApiError(error:unknown):string {
     if (isAxiosError(error)) {
         return error.response?.data.error || "An error occurred";
     }

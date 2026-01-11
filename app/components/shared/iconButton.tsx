@@ -7,7 +7,7 @@ type IconButtonSize = 'sm' | 'md' | 'lg';
 
 type IconButtonProps = {
   icon?: ReactNode;
-  onClick: (e: React.MouseEvent<HTMLButtonElement>|React.FormEvent<HTMLFormElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement|HTMLFormElement>) =>any;
   variant?: IconButtonVariant;
   size?: IconButtonSize;
   text?: string;

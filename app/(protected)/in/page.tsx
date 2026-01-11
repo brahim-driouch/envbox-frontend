@@ -8,7 +8,7 @@ import { useAuth } from '@/authProvider';
 import { FormField } from '@/app/components/shared/formField';
 import { Member } from '@/types/team';
 import { Project } from '@/types/project';
-import { MembersView } from '@/app/components/dashboard/members/memebrsView';
+import { MembersView } from '@/app/components/dashboard/contributors/contributorsView.tsx';
 import { Stats } from '@/app/components/dashboard/stats';
 
 

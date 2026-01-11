@@ -1,10 +1,11 @@
 'use client'
 
-import { createContext, useContext } from 'react'
+import { createContext, useContext, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getSessionAction } from '@/app/actions/userActions/getSessionAction'
 import { LoadingInline } from '@/app/components/shared/loading'
 import { LoggedInUser } from './types/userTypes'
+import { useRouter, usePathname } from 'next/navigation'
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -16,7 +17,13 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
+// Define public routes that don't require authentication
+const PUBLIC_ROUTES = ['/', '/login', '/signup', '/forgot-password']
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+    const router = useRouter()
+    const pathname = usePathname()
+    
     const { data, isLoading, isError } = useQuery({
         queryKey: ['auth'],
         queryFn: getSessionAction,
@@ -27,15 +34,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     
     const value = {
         isAuthenticated: data?.isAuthenticated ?? false,
-        user: data?.user as LoggedInUser | null ,
+        user: data?.user as LoggedInUser | null,
         isLoading,
         isError,
         error: data?.error ?? null
     }
-    
+
+    useEffect(() => {
+        if (!isLoading && !value.isAuthenticated) {
+            const isPublicRoute = PUBLIC_ROUTES.includes(pathname)
+            if (!isPublicRoute) {
+                router.push("/")
+            }
+        }
+    }, [isLoading, value.isAuthenticated, pathname, router])
+
+    if (isLoading) {
+        return <LoadingInline />
+    }
+  
     return (
-        <AuthContext.Provider value={value }>
-            {isLoading && <LoadingInline />}  {/* ✅ At root level */}
+        <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
     )

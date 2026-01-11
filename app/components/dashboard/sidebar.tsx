@@ -63,8 +63,8 @@ export const Sidebar = () => {
           />
           <NavItem
             icon={<Users className="w-5 h-5" />}
-            label="Members"
-            href="/in/members"
+            label="Contributors"
+            href="/in/contributors"
             isCollapsed={isCollapsed}
           />
           <NavItem

@@ -65,7 +65,7 @@ export const AddProjectForm = () => {
     return (
         <div className=" bg-zinc-900 border-2 border-zinc-800 p-6 rounded-lg">
             <h2 className="text-xl font-bold text-white mb-4">
-                {projectData.name ? 'Edit Project' : 'Add Project'}
+                Add Project
             </h2>
             <form onSubmit={handleSubmit} className="w-full flex flex-col justify-start items-start space-y-4">
                 <FormField
@@ -107,16 +107,16 @@ export const AddProjectForm = () => {
                 />
            <div className="flex gap-4 justify-end pt-4">
   {/* Cancel Button */}
-  <Link 
-    href="/in/projects" 
-    className="px-6 py-3 bg-zinc-800 text-white font-bold uppercase tracking-wider
-               hover:bg-zinc-700 transition-all duration-200 
-               border-2 border-zinc-700 hover:border-zinc-600
-               flex items-center justify-center gap-2"
-  >
-    Cancel
-  </Link>
-  
+        <Link 
+          href="/in/projects" 
+          className="px-6 py-3 bg-zinc-800 text-white font-bold uppercase tracking-wider
+                    hover:bg-zinc-700 transition-all duration-200 
+                    border-2 border-zinc-700 hover:border-zinc-600
+                    flex items-center justify-center gap-2"
+        >
+          Cancel
+        </Link>
+        
   {/* Save Button */}
   <button    
     disabled={mutation.isPending}

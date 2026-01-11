@@ -6,6 +6,7 @@ import axios, { AxiosError } from "axios"
 import { cookies } from "next/headers"
 import { LoggedInUser } from "@/types/userTypes";
 import { setAuthorizationHeaders } from "@/app/heplers/setAuthorizationHeaders"
+import { redirect } from "next/dist/server/api-utils"
 
 type SessionResponse = {
     success: boolean;
