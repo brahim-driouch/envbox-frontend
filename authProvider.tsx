@@ -18,7 +18,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 // Define public routes that don't require authentication
-const PUBLIC_ROUTES = ['/', '/login', '/signup', '/forgot-password']
+const PUBLIC_ROUTES = ['/', '/login', '/signup', '/forgot-password','/docs','/salodri']
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const router = useRouter()
@@ -44,7 +44,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (!isLoading && !value.isAuthenticated) {
             const isPublicRoute = PUBLIC_ROUTES.includes(pathname)
             if (!isPublicRoute) {
-                router.push("/")
+                router.push("/auth/login")
             }
         }
     }, [isLoading, value.isAuthenticated, pathname, router])

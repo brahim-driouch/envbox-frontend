@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { useDeleteTeam } from "@/app/hooks/teams/useDeleteTeam";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import Link from "next/link";
 
 export const TeamsView = () => {
   const mutation = useDeleteTeam();
@@ -94,16 +95,18 @@ export const TeamsView = () => {
                   <div className="inline-flex items-center gap-2 bg-cyan-900/30 border border-cyan-700 px-3 py-1 rounded-lg">
                     <Users className="w-4 h-4 text-cyan-400" />
                     <span className="text-cyan-400 font-semibold">
-                      {team?.members?.length ?? 0}
+                      {team?.contributors?.length ?? 0}
                     </span>
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right">
                   <div className="flex gap-2 justify-end">
+                    <Link href={`/in/teams/${team.id}`}>
                     <IconButton
                       icon={<Edit className="w-4 h-4" />}
-                      onClick={() => {}}
-                    />
+                     />
+                    </Link>
+                    
                     <IconButton
                       onClick={() => handleTeamDelete(team.id)}
                   icon={deletingId === team.id ? (
@@ -147,7 +150,7 @@ export const TeamsView = () => {
                 <div className="inline-flex items-center gap-2 bg-cyan-900/30 border border-cyan-700 px-3 py-1 rounded-lg">
                   <Users className="w-4 h-4 text-cyan-400" />
                   <span className="text-cyan-400 font-semibold text-sm">
-                    {team?.members?.length ?? 0} members
+                    {team?.contributors?.length ?? 0} members
                   </span>
                 </div>
               </div>

@@ -1,3 +1,5 @@
+import { Contributor } from "./contributor";
+import { Project } from "./project";
 
 
 export interface Team {
@@ -5,16 +7,11 @@ export interface Team {
   name: string;
   userId:string;
   description?:string;
-  members?: Member[];
+  contributors?: Contributor[];
+  projects?:Project[];
   createdAt: Date;
 }
-export interface Member {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-  createdAt?: Date;
-}
+
 
 export type TeamFormData = {
   name: string;

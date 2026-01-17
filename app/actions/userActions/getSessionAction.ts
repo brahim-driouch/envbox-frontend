@@ -57,6 +57,7 @@ export async function getSessionAction(): Promise<SessionResponse> {
     } catch (error) {
         console.log("Error in getSessionAction:", error);
         const errorMessage = handleApiError(error)
+        
         return {
             success: false,
             isAuthenticated: false,
